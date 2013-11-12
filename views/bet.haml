@@ -1,0 +1,10 @@
+.row
+  .span8.offset2
+    %h1= "#{session[:name]}, you have #{session[:money]}"
+    %h2= "How much do you want to bet?"
+.row
+  .span12
+    %form{ :action => "/bet", :method => "post"}
+      %fieldset
+        %input{:type => "text", :name => "bet", :class => "text"}
+        %input{:type => "submit"}

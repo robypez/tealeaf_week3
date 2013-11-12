@@ -1,0 +1,21 @@
+!!!
+%html
+  %head
+    %title My Blackjack Game
+    %link{"rel" => "stylesheet", "href" => "/vendor/bootstrap/css/bootstrap.min.css"}
+    %link{"rel" => "stylesheet", "href" => "/application.css"}
+  %body{ :style => "padding-top: 50px;" }
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          %ul.nav
+            %li
+              %a
+    .container
+      - if @error
+        .alert.alert-error= @error
+        .row
+          .span12
+            %p
+              %a.btn.btn-large.btn-primary{:href => "/bet"} Play again
+      = yield

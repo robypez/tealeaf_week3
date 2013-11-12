@@ -1,0 +1,16 @@
+.row
+  .span8.offset2
+    %h1 This is Blackjack
+.row
+  .span8.offset2
+    %h1 What's your name?
+.row
+  .span8.offset2
+    %form{ :action => "/new_player", :method => "post"}
+      %fieldset
+        %input{:type => "text", :name => "name", :class => "text"}
+        %input{:type => "submit"}
+      
+        
+
+

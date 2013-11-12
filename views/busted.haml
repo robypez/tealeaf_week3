@@ -1,0 +1,7 @@
+.row
+  .span8.offset2
+    %h1= "#{session[:name]} bust with #{session[:player_hand_value]} and lose #{session[:bet]}"
+.row
+  .span12
+    %p
+      %a.btn.btn-large.btn-primary{:href => "/bet"} Play again
