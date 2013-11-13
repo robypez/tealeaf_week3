@@ -6,12 +6,9 @@ require 'pry'
 set :sessions, true
 
 get '/' do
-  if session[:name]
+  
     haml :main
-  else
-    redirect '/new_player'
-  end
-  # erb :main
+  
 end
 
 get '/new_player' do
@@ -108,7 +105,7 @@ get '/prepare' do
   player_hand = card_deck.shift(2)
   dealer_hand = card_deck.shift(2)
   dealer_hand.first[:show] = false
-  dealer_hand_value = value(dealer_hand) - dealer_hand.first[:value]
+  dealer_hand_value = value(dealer_hand) - dealer_hand.first[:value] #compensate hidden card
   player_hand_value = value(player_hand)
 
   session[:deck] = card_deck
@@ -193,9 +190,6 @@ post '/game/player/stay' do
   session[:dealer_hand_value] = value(session[:dealer_hand])
   redirect '/game'
 end
-
-
-
 
 helpers do
   def value(hand)

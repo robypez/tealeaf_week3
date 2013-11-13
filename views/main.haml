@@ -1,12 +1,20 @@
-.row
-  .span8.offset2
-    %h1 This is Blackjack
-.row
-  .span8.offset2
-    %h1= "Hello #{session[:name]}"
-.row
-  .span8.offset2
-    %h1 Dealer Cards
-.row
-  .span8.offset2
-    %h1= "#{session[:name]} cards"
+#header-inner.fixed-header-container
+  .container
+    .row
+      .span12
+        .heading-text
+          %h1.animated.flipInY.delay1 Play.<span> Bet.</span> Win.
+          .span10.offset1.animated.fadeInLeftBig.delay2
+            %p
+              Discover my new Blackjack
+            %img.animated.fadeInUpBig.delay3.iphone-hand{"src" => "images/bj.png"}
+          .clear 
+.inner-heading
+  .container
+    .row
+      .span6
+        %h1.animated.fadeInDown.delay1 Ready <span> to</span> Play?
+        %p.animated.fadeInDown.delay2
+          Push the botton to create a new player.
+      .span6
+        %a.reg-btn{"href" => "/new_player"} Create new player

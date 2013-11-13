@@ -1,16 +1,12 @@
-.row
-  .span8.offset2
-    %h1 This is Blackjack
-.row
-  .span8.offset2
-    %h1 What's your name?
-.row
-  .span8.offset2
-    %form{ :action => "/new_player", :method => "post"}
-      %fieldset
-        %input{:type => "text", :name => "name", :class => "text"}
-        %input{:type => "submit"}
-      
-        
-
-
+#header-inner.fixed-header-container
+  .container
+    .row
+      .span12
+        .heading-text
+          %h1.animated.flipInY.delay1 Enter <span>Player</span> Name
+          .span10.offset1
+            %form{ :action => "/new_player", :method => "post"}
+              .control-group
+                .control
+                  %input{:type => "text", :name => "name", :class => "placeholder span4 required"}
+                %input{:type => "submit", :class => "reg-btn"}

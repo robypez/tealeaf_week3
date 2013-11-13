@@ -1,10 +1,14 @@
-.row
-  .span8.offset2
-    %h1= "#{session[:name]}, you have #{session[:money]}"
-    %h2= "How much do you want to bet?"
-.row
-  .span12
-    %form{ :action => "/bet", :method => "post"}
-      %fieldset
-        %input{:type => "text", :name => "bet", :class => "text"}
-        %input{:type => "submit"}
+#header-inner.fixed-header-container
+  .container
+    .row
+      .span12
+        .heading-text
+          %h1="#{session[:name]} you have <span>#{session[:money]}</span>"
+              
+          %h1 <h1><span>How much do you want to bet?</span> </h1>
+          .span10.offset1
+            %form{ :action => "/bet", :method => "post"}
+              .control-group
+                .control
+                  %input{:type => "text", :name => "bet", :class => "placeholder span4 required"}
+                %input{:type => "submit", :class => "reg-btn"}

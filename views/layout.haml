@@ -1,29 +1,46 @@
 !!!
 %html
   %head
-    %title My Blackjack Game
+    %title Blackjack
+    %meta{"http-equiv" => "Content-Type", "content" => "text/html; charset=UTF-8"}
+    %meta{"name" => "viewport", "content" => "width=device-width, initial-scale=1.0"}
     %link{"rel" => "stylesheet", "href" => "/vendor/bootstrap/css/bootstrap.min.css"}
+    %link{"rel" => "stylesheet", "href" => "/vendor/bootstrap/css/capture.css"}
+    %link{"rel" => "stylesheet", "href" => "/vendor/bootstrap/css/animate.css"}
+    %link{"rel" => "stylesheet", "href" => "/vendor/bootstrap/css/font-awesome.css"}
+    %link{"rel" => "stylesheet", "href" => "http://fonts.googleapis.com/css?family=Raleway:400,200,300,500,600,700,800,900"}
+    %link{"rel" => "stylesheet", "href" => "http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic"}
     %link{"rel" => "stylesheet", "href" => "/application.css"}
-  %body{ :style => "padding-top: 50px;" }
-    .navbar.navbar-fixed-top
-      .navbar-inner
+
+  %body{"style" => "background: #117d10;"} 
+    =yield
+
+    - if @error
+      .inner-heading
         .container
-          %ul.nav
-            %li
-              %a
-    .container
-      - if @error
-        .alert.alert-error= @error
-        .row
-          .span12
-            %p
-              %a.btn.btn-large.btn-primary{:href => "/bet"} Play again
-      - if @bet_again
-        .alert.alert-error= @bet_again
-      - if @new_game
-        .alert.alert-error= @new_game
-        .row
-          .span12
-            %p
-              %a.btn.btn-large.btn-primary{:href => "/new_player"} New match
-      = yield
+          .row
+            .span8
+              %h1.animated.fadeInDown.delay1= @error
+            .span4
+              %a.reg-btn{:href => "/bet"} Play again
+    - if @bet_again
+      .inner-heading
+        .container
+          .row
+            .span8
+              %h1.animated.fadeInDown.delay1= @bet_again
+    - if @new_game
+      .inner-heading
+        .container
+          .row
+            .span8
+              %h1.animated.fadeInDown.delay1= @new_game
+            .span4
+              %a.reg-btn{:href => "/new_player"} New Match
+
+      %script{"src" => "http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"}
+      %script{"src" => "/vendor/js/bootstrap.min.js"}
+      %script{"src" => "/vendor/js/twitter-bootstrap-hover-dropdown.js"}
+      %script{"src" => "/vendor/js/capture.js"}
+      %script{"src" => "/vendor/js/fixed-header.js"}
+      %script{"src" => "/vendor/js/modernizr.custom.js"}
