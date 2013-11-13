@@ -4,19 +4,31 @@
 .row
   .span12
     %h1 Dealer card
-    %h2="#{session[:dealer_hand]} with #{session[:dealer_hand_value]}"
-  - if session[:player_status] == :stay && session[:dealer_hand_value] < 18
-    .span12
-      %p
-        %form{ :action => "/game/dealer/hit", :method => "post"}
-          %button.btn.btn-large.btn-primary{:type => "submit"} Turn dealer card
+.row
+  - session[:dealer_hand].each do |card|
+    .span2
+      = view(card)
+.row
+  .span12
+    %h2="Value #{session[:dealer_hand_value]}"
+    - if session[:player_status] == :stay && session[:dealer_status] == :must_turn
+      .span12
+        %p
+          %form{ :action => "/game/dealer/hit", :method => "post"}
+            %button.btn.btn-large.btn-primary{:type => "submit"} Turn dealer card
 
 .row
   .span12
     %h1= "#{session[:name]} cards"
-    %h2="#{session[:player_hand]} with #{session[:player_hand_value]}"
+.row
+  - session[:player_hand].each do |card|
+    .span2
+      = view(card)
+.row
   .span12
-    - unless @error || session[:player_status] == :stay
+    %h2="value #{session[:player_hand_value]}"
+  .span12
+    - unless @error || session[:player_status] == :stay || session[:player_hand_value] == 21
       %h1= "What do you want to do?"
       %p
         %form{ :action => "/game/player/stay", :method => "post"}

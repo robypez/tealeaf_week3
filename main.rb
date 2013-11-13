@@ -15,6 +15,7 @@ get '/' do
 end
 
 get '/new_player' do
+  session.clear
   haml :new_player
   # erb :play
 end
@@ -26,13 +27,26 @@ end
  
 get '/bet' do
   session[:money] ||= 500
+  session[:bet] ||= 0
+
+  if session[:money] == 0
+    @new_game = "not enough money"
+  end
+  if session[:money] < session[:bet]
+    @bet_again = "You can't bet with money that you don't have"
+  end
   haml :bet
 end
 
 post '/bet' do
   session[:bet] = params[:bet].to_i
-  session[:money] -= session[:bet]
-  redirect '/prepare'
+  if session[:money] - session[:bet] < 0
+    redirect '/bet'
+  else
+    session[:money] -= session[:bet]
+    redirect '/prepare'
+  end
+  
 end
 
 get '/prepare' do
@@ -93,7 +107,8 @@ get '/prepare' do
   card_deck.shuffle!
   player_hand = card_deck.shift(2)
   dealer_hand = card_deck.shift(2)
-  dealer_hand_value = value(dealer_hand)
+  dealer_hand.first[:show] = false
+  dealer_hand_value = value(dealer_hand) - dealer_hand.first[:value]
   player_hand_value = value(player_hand)
 
   session[:deck] = card_deck
@@ -101,7 +116,16 @@ get '/prepare' do
   session[:dealer_hand] = dealer_hand
   session[:player_hand_value] = player_hand_value
   session[:dealer_hand_value] = dealer_hand_value
-  session[:player_status] = :hit
+  session[:player_status] = :neutral
+  session[:dealer_status] = :neutral
+
+  if is_blackjack?(player_hand_value)
+    session[:player_status] = :blackjack
+  end
+
+  if is_blackjack?(dealer_hand_value)
+    session[:dealer_status] = :blackjack
+  end
 
   redirect '/game'
 
@@ -109,8 +133,42 @@ end
 
 get '/game' do
 
+  if session[:player_status] == :blackjack
+    @error = "Player blackjack"
+    session[:money] += session[:bet]*2.5
+  elsif session[:dealer_status] == :blackjack
+    @error = "Dealer blackjack"
+  elsif session[:player_status] == :blackjack && session[:dealer_status] == :blackjack
+    session[:money] += session[:bet]
+    @error = "Deal match"
+  end
+
   if session[:player_hand_value] > 21
-    @error = "Player busted"
+    session[:player_status] = :busted
+    @error = "Player Busted, dealer win"
+  end
+
+  if session[:dealer_hand_value] < 17
+    session[:dealer_status] = :must_turn
+  end
+
+  if session[:dealer_hand_value].between?(17,21)
+    session[:dealer_status] = :must_stay
+  end
+
+  if session[:dealer_hand_value] > 21
+    session[:dealer_status] = :busted
+    session[:money] += session[:bet]*2
+    @error = "Dealer Busted, player win"
+  end
+
+  if session[:dealer_status] == :must_stay && session[:player_status] == :stay
+    if session[:player_hand_value] >= session[:dealer_hand_value]
+      session[:money] += session[:bet]*2
+      @error = "Player Win"
+    else
+      @error = "Dealer Win"
+    end
   end
   
   haml :game
@@ -123,8 +181,16 @@ post '/game/player/hit' do
   redirect '/game'
 end
 
+post '/game/dealer/hit' do
+  session[:dealer_hand] << session[:deck].first
+  session[:dealer_hand_value] = value(session[:dealer_hand])
+  redirect '/game'
+end
+
 post '/game/player/stay' do
   session[:player_status] = :stay
+  session[:dealer_hand].first[:show] = true
+  session[:dealer_hand_value] = value(session[:dealer_hand])
   redirect '/game'
 end
 
@@ -147,10 +213,16 @@ helpers do
     return count
   end
 
-  def view(hand)
-    hand.each do |card|
-      ".span2"
-    end   
+  def view(card)
+    if card[:show] != false
+      "<img src='/images/cards/#{card[:suit]}_#{card[:card]}.jpg'>"
+    else
+      "<img src='/images/cards/cover.jpg'>"
+    end
+  end
+
+  def is_blackjack?(value)
+  return true if value == 21
   end
 
 end

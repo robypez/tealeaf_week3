@@ -18,4 +18,12 @@
           .span12
             %p
               %a.btn.btn-large.btn-primary{:href => "/bet"} Play again
+      - if @bet_again
+        .alert.alert-error= @bet_again
+      - if @new_game
+        .alert.alert-error= @new_game
+        .row
+          .span12
+            %p
+              %a.btn.btn-large.btn-primary{:href => "/new_player"} New match
       = yield
