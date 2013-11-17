@@ -176,7 +176,7 @@ get '/game' do
 end
 
 post '/game/player/hit' do
-  @card = session[:deck].first
+  @card = session[:deck].shift
   session[:player_hand] << @card
   session[:player_hand_value] = value(session[:player_hand])
   haml :card, :layout => false 

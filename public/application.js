@@ -24,7 +24,7 @@ $(document).ready(function() {
   $('form#hit').submit(function(e){
     $.ajax({
       url : '/game/player/hit',
-      type: 'GET',
+      type: 'POST',
       success:function(data, textStatus, jqXHR) 
       {
           $( '#player_cards div:last' ).before( data );
