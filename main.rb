@@ -1,14 +1,16 @@
 require 'rubygems'
 require 'sinatra'
 require 'haml'
+require 'json'
 require 'pry'
 
 set :sessions, true
+START_POT = 500
+BLACKJACK = 21
+DEAL_MUST_STAY = 17
 
-get '/' do
-  
+get '/' do 
     haml :main
-  
 end
 
 get '/new_player' do
@@ -23,28 +25,29 @@ post '/new_player' do
 end
  
 get '/bet' do
-  session[:money] ||= 500
-  session[:bet] ||= 0
-
-  if session[:money] == 0
-    @new_game = "not enough money"
-  end
-  if session[:money] < session[:bet]
-    @bet_again = "You can't bet with money that you don't have"
-  end
+  session[:money] ||= START_POT
+  
   haml :bet
+end
+
+post '/bet_validate' do
+
+  content_type 'application/json'
+
+  if params[:bet].to_i > session[:money]
+    { :validate => false }.to_json
+  else
+    { :validate => true }.to_json
+  end
+  
 end
 
 post '/bet' do
   session[:bet] = params[:bet].to_i
-  if session[:money] - session[:bet] < 0
-    redirect '/bet'
-  else
-    session[:money] -= session[:bet]
-    redirect '/prepare'
-  end
-  
+  session[:money] -= session[:bet]
+  redirect '/prepare'
 end
+  
 
 get '/prepare' do
     card_deck = [{ card: 'Ace', suit: :spades, value:  11 },
@@ -140,20 +143,20 @@ get '/game' do
     @error = "Deal match"
   end
 
-  if session[:player_hand_value] > 21
+  if session[:player_hand_value] > BLACKJACK
     session[:player_status] = :busted
     @error = "Player Busted, dealer win"
   end
 
-  if session[:dealer_hand_value] < 17
+  if session[:dealer_hand_value] < DEAL_MUST_STAY
     session[:dealer_status] = :must_turn
   end
 
-  if session[:dealer_hand_value].between?(17,21)
+  if session[:dealer_hand_value].between?(DEAL_MUST_STAY,BLACKJACK)
     session[:dealer_status] = :must_stay
   end
 
-  if session[:dealer_hand_value] > 21
+  if session[:dealer_hand_value] > BLACKJACK
     session[:dealer_status] = :busted
     session[:money] += session[:bet]*2
     @error = "Dealer Busted, player win"
@@ -173,22 +176,24 @@ get '/game' do
 end
 
 post '/game/player/hit' do
-  session[:player_hand] << session[:deck].first
+  @card = session[:deck].first
+  session[:player_hand] << @card
   session[:player_hand_value] = value(session[:player_hand])
-  redirect '/game'
+  haml :card, :layout => false 
+  
 end
 
 post '/game/dealer/hit' do
   session[:dealer_hand] << session[:deck].first
   session[:dealer_hand_value] = value(session[:dealer_hand])
-  redirect '/game'
+  
 end
 
 post '/game/player/stay' do
   session[:player_status] = :stay
   session[:dealer_hand].first[:show] = true
   session[:dealer_hand_value] = value(session[:dealer_hand])
-  redirect '/game'
+  
 end
 
 helpers do
@@ -209,14 +214,14 @@ helpers do
 
   def view(card)
     if card[:show] != false
-      "<img src='/images/cards/#{card[:suit]}_#{card[:card]}.jpg'>"
+      "<img src='/images/cards/#{card[:suit]}_#{card[:card].downcase}.jpg'>"
     else
       "<img src='/images/cards/cover.jpg'>"
     end
   end
 
   def is_blackjack?(value)
-  return true if value == 21
+  return true if value == BLACKJACK
   end
 
 end

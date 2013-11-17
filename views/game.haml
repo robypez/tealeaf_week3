@@ -3,8 +3,8 @@
     .row
       .span12
         .heading-text
-          %h1="Dealer <span>cards</span> (#{session[:dealer_hand_value]})"
-    .row.animated.fadeInDown.delay
+          %h1="Dealer <span>cards</span>"
+    #dealer_cards.row.animated.fadeInDown.delay
       - session[:dealer_hand].each do |card|
         .span2
           = view(card)
@@ -18,14 +18,14 @@
     .row
       .span12
         .heading-text
-          %h1="#{session[:name]} <span>cards</span> (#{session[:player_hand_value]})"
-    .row.animated.fadeInDown.delay
+          %h1="#{session[:name]} <span>cards</span>"
+    #player_cards.row.animated.fadeInDown.delay
       - session[:player_hand].each do |card|
         .span2
           = view(card)
       - unless @error || session[:player_status] == :stay || session[:player_hand_value] == 21
         .span2
-          %form{ :action => "/game/player/stay", :method => "post"}
+          %form#stay{ :method => "post"}
             %button.reg-btn{:type => "submit"} Stay
-          %form{ :action => "/game/player/hit", :method => "post"}
+          %form#hit{ :method => "post"}
             %button.reg-btn{:type => "submit"} hit
