@@ -198,37 +198,37 @@ helpers do
   end
 
   def is_blackjack?(value)
-  return true if value == BLACKJACK
+    return true if value == BLACKJACK
   end
 
   def check_winner
     if session[:player_hand_value] > BLACKJACK
-    session[:player_status] = :busted
-    @error = "Player Busted, dealer win"
-  end
-
-  if session[:dealer_hand_value] < DEAL_MUST_STAY
-    session[:dealer_status] = :must_turn
-  end
-
-  if session[:dealer_hand_value].between?(DEAL_MUST_STAY,BLACKJACK)
-    session[:dealer_status] = :must_stay
-  end
-
-  if session[:dealer_hand_value] > BLACKJACK
-    session[:dealer_status] = :busted
-    session[:money] += session[:bet]*2
-    @error = "Dealer Busted, player win"
-  end
-
-  if session[:dealer_status] == :must_stay && session[:player_status] == :stay
-    if session[:player_hand_value] >= session[:dealer_hand_value]
-      session[:money] += session[:bet]*2
-      @error = "Player Win"
-    else
-      @error = "Dealer Win"
+      session[:player_status] = :busted
+      @error = "Player Busted, dealer win"
     end
-  end
+
+    if session[:dealer_hand_value] < DEAL_MUST_STAY
+      session[:dealer_status] = :must_turn
+    end
+
+    if session[:dealer_hand_value].between?(DEAL_MUST_STAY,BLACKJACK)
+      session[:dealer_status] = :must_stay
+    end
+
+    if session[:dealer_hand_value] > BLACKJACK
+      session[:dealer_status] = :busted
+      session[:money] += session[:bet]*2
+      @error = "Dealer Busted, player win"
+    end
+
+    if session[:dealer_status] == :must_stay && session[:player_status] == :stay
+      if session[:player_hand_value] >= session[:dealer_hand_value]
+        session[:money] += session[:bet]*2
+        @error = "Player Win"
+      else
+        @error = "Dealer Win"
+      end
+    end
   end
 
 end
