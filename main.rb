@@ -8,49 +8,7 @@ set :sessions, true
 START_POT = 500
 BLACKJACK = 21
 DEAL_MUST_STAY = 17
-
-get '/' do 
-    haml :main
-end
-
-get '/new_player' do
-  session.clear
-  haml :new_player
-  # erb :play
-end
-
-post '/new_player' do
-  session[:name] = params[:name]
-  redirect '/bet'
-end
- 
-get '/bet' do
-  session[:money] ||= START_POT
-  
-  haml :bet
-end
-
-post '/bet_validate' do
-
-  content_type 'application/json'
-
-  if params[:bet].to_i > session[:money]
-    { :validate => false }.to_json
-  else
-    { :validate => true }.to_json
-  end
-  
-end
-
-post '/bet' do
-  session[:bet] = params[:bet].to_i
-  session[:money] -= session[:bet]
-  redirect '/prepare'
-end
-  
-
-get '/prepare' do
-    card_deck = [{ card: 'Ace', suit: :spades, value:  11 },
+CARDDECK = [{ card: 'Ace', suit: :spades, value:  11 },
                { card: '2', suit: :spades, value: 2 },
                { card: '3', suit: :spades, value: 3 },
                { card: '4', suit: :spades, value: 4 },
@@ -104,13 +62,53 @@ get '/prepare' do
                { card: 'King', suit: :clubs, value: 10 }
              ]
 
+get '/' do 
+    haml :main
+end
+
+get '/new_player' do
+  session.clear
+  haml :new_player
+  # erb :play
+end
+
+post '/new_player' do
+  session[:name] = params[:name]
+  redirect '/bet'
+end
+ 
+get '/bet' do
+  session[:money] ||= START_POT
+  
+  haml :bet
+end
+
+post '/bet_validate' do
+
+  content_type 'application/json'
+
+  if params[:bet].to_i > session[:money]
+    { :validate => false }.to_json
+  else
+    { :validate => true }.to_json
+  end
+  
+end
+
+post '/bet' do
+  session[:bet] = params[:bet].to_i
+  session[:money] -= session[:bet]
+  redirect '/prepare'
+end
+  
+get '/prepare' do    
+  card_deck = CARDDECK
   card_deck.shuffle!
   player_hand = card_deck.shift(2)
   dealer_hand = card_deck.shift(2)
   dealer_hand.first[:show] = false
   dealer_hand_value = value(dealer_hand) - dealer_hand.first[:value] #compensate hidden card
   player_hand_value = value(player_hand)
-
   session[:deck] = card_deck
   session[:player_hand] = player_hand
   session[:dealer_hand] = dealer_hand
@@ -128,7 +126,6 @@ get '/prepare' do
   end
 
   redirect '/game'
-
 end
 
 get '/game' do
