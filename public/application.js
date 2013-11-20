@@ -21,13 +21,26 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
+  $('#name input').blur(function()
+    {
+        
+        if( !$(this).val() ) {
+             $(":submit").attr( "disabled", "disabled" );
+            } 
+            else {
+            $(":submit").removeAttr( "disabled" );
+            }
+
+       
+    });
+
   $('form#hit').submit(function(e){
     $.ajax({
       url : '/game/player/hit',
       type: 'POST',
       success:function(data, textStatus, jqXHR) 
       {
-          $( '#player_cards div:last' ).before( data );
+          $( '#game_table' ).replaceWith( data );
       },
       error: function(jqXHR, textStatus, errorThrown) 
       {
@@ -37,13 +50,13 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
-  $('form#stay').submit(function(e){
+  $('form#dealer_hit').submit(function(e){
     $.ajax({
-      url : '/game/player/stay',
+      url : '/game/dealer/hit',
       type: 'POST',
       success:function(data, textStatus, jqXHR) 
       {
-          console.log(data)
+          $( '#game_table' ).replaceWith( data );
       },
       error: function(jqXHR, textStatus, errorThrown) 
       {
@@ -52,4 +65,5 @@ $(document).ready(function() {
     });
     e.preventDefault();
   });
+
 });

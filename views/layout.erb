@@ -18,10 +18,7 @@
     </div>
 
   <div class="container">
-    <%if @error %>
-      <div class="alert alert-error"><%=@error%></div>
-    <% end %>
-      <%= yield %>
+    <%= yield %>
   </div>
   </body>
 </html>

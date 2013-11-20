@@ -1,31 +1,40 @@
-#header-inner.fixed-header-container
-  .container
-    .row
-      .span12
-        .heading-text
-          %h1="Dealer <span>cards</span>"
-    #dealer_cards.row.animated.fadeInDown.delay
-      - session[:dealer_hand].each do |card|
-        .span2
-          = view(card)
-      - if session[:player_status] == :stay && session[:dealer_status] == :must_turn
-        .span2
-          %p
-            %form{ :action => "/game/dealer/hit", :method => "post"}
-              %button.reg-btn{:type => "submit"} Turn dealer card
-#header-inner.fixed-header-container
-  .container
-    .row
-      .span12
-        .heading-text
-          %h1="#{session[:name]} <span>cards</span>"
-    #player_cards.row.animated.fadeInDown.delay
-      - session[:player_hand].each do |card|
-        .span2
-          = view(card)
-      - unless @error || session[:player_status] == :stay || session[:player_hand_value] == 21
-        .span2
-          %form#stay{ :method => "post"}
-            %button.reg-btn{:type => "submit"} Stay
-          %form#hit{ :method => "post"}
-            %button.reg-btn{:type => "submit"} hit
+#game_table
+  #header-inner.fixed-header-container
+    .container
+      .row
+        .span12
+          .heading-text
+            %h1="Dealer <span>cards</span>"
+      #dealer_cards.row.animated.fadeInDown.delay
+        - session[:dealer_hand].each do |card|
+          .span2
+            = view(card)
+        - if session[:player_status] == :stay && session[:dealer_status] == :must_turn
+          .span2
+            %p
+              %form{ :action => "/game/dealer/hit", :method => "post"}
+                %button.reg-btn{:type => "submit"} Turn dealer card
+  #header-inner.fixed-header-container
+    .container
+      .row
+        .span12
+          .heading-text
+            %h1="#{session[:name]} <span>cards</span>"
+      #player_cards.row.animated.fadeInDown.delay
+        - session[:player_hand].each do |card|
+          .span2
+            = view(card)
+        - unless @error || session[:player_status] == :stay || session[:player_hand_value] == 21
+          .span2
+            %form#stay{ :action => "/game/player/stay", :method => "post"}
+              %button.reg-btn{:type => "submit"} Stay
+            %form#hit{ :action => "/game/player/hit", :method => "post"}
+              %button.reg-btn{:type => "submit"} hit
+  - if @error
+    .inner-heading
+      .container
+        .row
+          .span8
+            %h1.animated.fadeInDown.delay1= @error
+          .span4
+            %a.reg-btn{:href => "/bet"} Play again

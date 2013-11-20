@@ -5,7 +5,7 @@
         .heading-text
           %h1.animated.flipInY.delay1 Enter <span>Player</span> Name
           .span10.offset1
-            %form{ :action => "/new_player", :method => "post"}
+            %form#name{ :action => "/new_player", :method => "post"}
               .control-group
                 .control
                   %input{:type => "text", :name => "name", :class => "placeholder span4 required"}
