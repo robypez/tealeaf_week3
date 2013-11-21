@@ -21,20 +21,7 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
-  $('#name input').blur(function()
-    {
-        
-        if( !$(this).val() ) {
-             $(":submit").attr( "disabled", "disabled" );
-            } 
-            else {
-            $(":submit").removeAttr( "disabled" );
-            }
-
-       
-    });
-
-  $('form#hit').submit(function(e){
+  $(document).on("click", "form#player_hit input", function() {
     $.ajax({
       url : '/game/player/hit',
       type: 'POST',
@@ -47,10 +34,26 @@ $(document).ready(function() {
           //if fails      
       }
     });
-    e.preventDefault();
+    
   });
 
-  $('form#dealer_hit').submit(function(e){
+  $(document).on("click", "form#player_stay input", function() {
+    $.ajax({
+      url : '/game/player/stay',
+      type: 'POST',
+      success:function(data, textStatus, jqXHR) 
+      {
+          $( '#game_table' ).replaceWith( data );
+      },
+      error: function(jqXHR, textStatus, errorThrown) 
+      {
+          //if fails      
+      }
+    });
+    
+  });
+
+  $(document).on("click", "form#dealer_hit input", function() {
     $.ajax({
       url : '/game/dealer/hit',
       type: 'POST',
@@ -63,7 +66,7 @@ $(document).ready(function() {
           //if fails      
       }
     });
-    e.preventDefault();
+    
   });
 
 });

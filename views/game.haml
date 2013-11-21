@@ -12,7 +12,7 @@
         - if session[:player_status] == :stay && session[:dealer_status] == :must_turn
           .span2
             %p
-              %form{ :action => "/game/dealer/hit", :method => "post"}
+              %form#dealer_hit{ :action => "/game/dealer/hit", :method => "post"}
                 %button.reg-btn{:type => "submit"} Turn dealer card
   #header-inner.fixed-header-container
     .container

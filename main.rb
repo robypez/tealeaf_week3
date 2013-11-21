@@ -166,8 +166,8 @@ post '/game/player/stay' do
   session[:player_status] = :stay
   session[:dealer_hand].first[:show] = true
   session[:dealer_hand_value] = value(session[:dealer_hand])
-
-  redirect '/game'
+  check_winner
+  haml :game, :layout => false 
 end
 
 helpers do
