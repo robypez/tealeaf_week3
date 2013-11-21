@@ -13,7 +13,7 @@
           .span2
             %p
               %form#dealer_hit{ :action => "/game/dealer/hit", :method => "post"}
-                %button.reg-btn{:type => "submit"} Turn dealer card
+                %input.reg-btn{:type => "submit", :value => "Turn dealer card"} 
   #header-inner.fixed-header-container
     .container
       .row
@@ -27,9 +27,9 @@
         - unless @error || session[:player_status] == :stay || session[:player_hand_value] == 21
           .span2
             %form#player_stay{ :action => "/game/player/stay", :method => "post"}
-              %button.reg-btn{:type => "submit"} Stay
+              %input.reg-btn{:type => "submit", :value => "Stay"} 
             %form#player_hit{ :action => "/game/player/hit", :method => "post"}
-              %button.reg-btn{:type => "submit"} hit
+              %input.reg-btn{:type => "submit", :value => "Hit"}
   - if @error
     .inner-heading
       .container
