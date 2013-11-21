@@ -26,9 +26,9 @@
             = view(card)
         - unless @error || session[:player_status] == :stay || session[:player_hand_value] == 21
           .span2
-            %form#stay{ :action => "/game/player/stay", :method => "post"}
+            %form#player_stay{ :action => "/game/player/stay", :method => "post"}
               %button.reg-btn{:type => "submit"} Stay
-            %form#hit{ :action => "/game/player/hit", :method => "post"}
+            %form#player_hit{ :action => "/game/player/hit", :method => "post"}
               %button.reg-btn{:type => "submit"} hit
   - if @error
     .inner-heading
