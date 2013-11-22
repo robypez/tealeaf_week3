@@ -21,7 +21,8 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
-  $(document).on("click", "form#player_hit input", function() {
+  $(document).on("click", "form#player_hit input", function(e) {
+     e.preventDefault();
     $.ajax({
       url : '/game/player/hit',
       type: 'POST',
@@ -37,7 +38,8 @@ $(document).ready(function() {
     
   });
 
-  $(document).on("click", "form#player_stay input", function() {
+  $(document).on("click", "form#player_stay input", function(e) {
+    e.preventDefault();
     $.ajax({
       url : '/game/player/stay',
       type: 'POST',
@@ -53,7 +55,8 @@ $(document).ready(function() {
     
   });
 
-  $(document).on("click", "form#dealer_hit input", function() {
+  $(document).on("click", "form#dealer_hit input", function(e) {
+     e.preventDefault();
     $.ajax({
       url : '/game/dealer/hit',
       type: 'POST',
